@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- <header class="main-header">
+        <h1 class="main-header__title">DONT TOUCH THE SPIKES</h1>
+    </header> -->
+
+    <main class="main">
+        <div class="main-aim">
+            <h2 class="main-aim__title">Reach 40 points to get 100 FPIBanks</h2>
+            <p class="main-aim__description">Send a video of reaching 40 points to the creator of game to get royalties</p>
+            <progress class="main-aim__progress" max="40" value='0'></progress>
+        </div>
+
+        <div class="game">
+            <span class="game__best-score">Best Score: 0</span>
+            <canvas id='canvas' width="500" height="750" class="game__canvas"></canvas> 
+        </div>
+    </main>
+
+    <audio id='jump' src="sfx/@starboyrob - medhvt perc.wav"></audio>
+    <audio id='crash' src="sfx/@starboyrob - rob needle 2.wav"></audio>
+    <audio id='wallColl' src="sfx/@starboyrob - dara needle 2.wav"></audio>
+
+    <script src="js/script.js"></script>
+    
+</body>
+</html>

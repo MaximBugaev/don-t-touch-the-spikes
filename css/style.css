@@ -1,0 +1,70 @@
+body {
+    font-family: "Roboto", serif;
+    font-weight: 500;
+    color: #000000;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 50px auto 0;
+}
+
+.main-aim {
+    width: 80%;
+    margin: 0 auto;
+    font-size: 2em;
+}
+
+.main-aim__title {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+}
+
+.main-aim__description {
+    margin-bottom: 40px;
+}
+
+.game {
+    margin: 0 auto;
+}
+
+.game__best-score {
+    font-size: 2em;
+}
+
+.game__canvas {
+    display: block; 
+    border: #000000 1px solid; 
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .main {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .game {
+        /* min-width: 100%; */
+        margin: 0 auto;
+        order: -1;
+        margin-bottom: 40px;
+    }
+
+    .main-aim {
+        width: 100%;
+    }
+
+}
