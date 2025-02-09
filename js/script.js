@@ -12,6 +12,9 @@ let jumpSfx = document.querySelector('#jump');
 let crashSfx = document.querySelector('#crash');
 let wallCollSfx = document.querySelector('#wallColl');
 
+let device = 'pc';
+screen.availWidth < 768 ? device = 'mobile' : device = 'pc';
+
 jumpSfx.volume = 0.3;
 crashSfx.volume = 0.5;
 wallCollSfx.volume = 0.3;
@@ -198,8 +201,10 @@ function endGame() {
     bird.alive = false;
     bird.color = 'grey';
     document.removeEventListener('mousedown', birdJump);
+    document.removeEventListener('touchstart', birdJump);
     
     document.addEventListener('mousedown', retryGame);
+    document.addEventListener('touchstart', retryGame);
 }
 
 function retryGame() {
@@ -225,8 +230,10 @@ function retryGame() {
     mainColor = '#ffd4dd';
 
     spikeColumn = [];
-    document.addEventListener('mousedown', birdJump);
     document.removeEventListener('mousedown', retryGame);
+    document.removeEventListener('touchstart', retryGame);
+
+    device === 'pc' ? document.addEventListener('mousedown', birdJump) : document.addEventListener('touchstart', birdJump);
 }
 
 function drawScore() {
@@ -369,7 +376,4 @@ function birdJump() {
     jumpSfx.play();
 }
 
-document.addEventListener('mousedown', birdJump);
-// document.addEventListener('touchstart', birdJump);
-
-// добавить песню Jump
+device === 'pc' ? document.addEventListener('mousedown', birdJump) : document.addEventListener('touchstart', birdJump);

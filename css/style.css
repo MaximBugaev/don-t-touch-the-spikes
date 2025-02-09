@@ -54,13 +54,18 @@ p {
     .main {
         display: flex;
         flex-direction: column;
+        margin: 0;
     }
 
     .game {
-        /* min-width: 100%; */
-        margin: 0 auto;
+        width: 100%;
+        margin: 0;
         order: -1;
         margin-bottom: 40px;
+    }
+
+    .game__canvas {
+        width: 100%;
     }
 
     .main-aim {
