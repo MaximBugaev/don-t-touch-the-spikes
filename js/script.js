@@ -90,11 +90,39 @@ function spawnSpikeRow() {
 
 spawnSpikeRow();
 
+let stop = false;
+let frameCount = 0;
+let fps, fpsInterval, startTime, now, then, elapsed;
+
+
+// initialize the timer variables and start the animation
+
+function startAnimating(fps) {
+    fpsInterval = 1000 / fps;
+    then = Date.now();
+    startTime = then;
+    animate();
+}
+
+startAnimating(60);
+
+function animate() {
+
+    requestAnimationFrame(animate);
+
+    now = Date.now();
+    elapsed = now - then;
+
+    if (elapsed > fpsInterval) {
+        then = now - (elapsed % fpsInterval);
+        gameLoop();
+    }
+}
+
 function gameLoop() {
     update();
     wallCollisions();
     draw();
-    window.requestAnimationFrame(gameLoop);
 }
 
 function update() {
