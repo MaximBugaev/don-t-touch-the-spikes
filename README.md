@@ -5,6 +5,6 @@ It is my first canvas browser game\
 ## Technologies
 > * HTML
 > * CSS
-> * JS (using canvas)\
+> * JS (using canvas)
 
 <u>Have a good game!</u>
