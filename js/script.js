@@ -102,7 +102,7 @@ function startAnimating(fps) {
     animate();
 }
 
-startAnimating(120);
+startAnimating(65);
 
 function animate() {
 
