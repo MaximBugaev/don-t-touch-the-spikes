@@ -7,4 +7,4 @@ It is my first canvas browser game\
 > * CSS
 > * JS (using canvas)\
 
-[Have a good game!]
+<u>Have a good game!</u>
