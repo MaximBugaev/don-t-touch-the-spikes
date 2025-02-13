@@ -95,8 +95,6 @@ let frameCount = 0;
 let fps, fpsInterval, startTime, now, then, elapsed;
 
 
-// initialize the timer variables and start the animation
-
 function startAnimating(fps) {
     fpsInterval = 1000 / fps;
     then = Date.now();
@@ -104,7 +102,7 @@ function startAnimating(fps) {
     animate();
 }
 
-startAnimating(60);
+startAnimating(120);
 
 function animate() {
 
