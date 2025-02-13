@@ -23,7 +23,7 @@ let gravity = 0.5;
 let score = 0;
 let bestScore = 0;
 
-let bestScoreCaption = document.querySelector('.game__best-score');
+let bestScoreCaption = document.querySelector('.game-info__best-score');
 let aimProgress = document.querySelector('.main-aim__progress')
 
 let mainColor = '#ffd4dd';
@@ -159,18 +159,25 @@ function drawBird() {
 function drawSpikeColumn() {
     let spikeX;
     let spikeW;
+    let spikeVerticalHitbox;
 
     spikeColumn.forEach((spike) => {
         if(bird.vector === 'left') {
             spikeX = spike.width;
-            spikeW = -spike.width + 1;
+            spikeW = -spike.width; //-1
         } else {
             spikeX = canvas.width - spike.width;
-            spikeW = Math.abs(spike.width) - 1;
+            spikeW = Math.abs(spike.width); // +1
         }
 
         let topAngle = {x: spikeX + spikeW, y: spike.y + spike.height};
         let botAngle = {x: spikeX + spikeW, y: spike.y - spike.height};
+
+        if(bird.vector === 'left') {
+            spikeVerticalHitbox = topAngle.x 
+        } else {
+            spikeVerticalHitbox = topAngle.x - 2
+        }
 
         ctx.fillStyle = 'grey';
         ctx.beginPath();
@@ -180,7 +187,7 @@ function drawSpikeColumn() {
         ctx.fill();
 
         if(rectIntersect(bird.x - bird.width / 2, bird.y - bird.height / 2, 40, 40, spikeX, spike.y, spikeW, 2) ||
-         rectIntersect(bird.x - bird.width / 2, bird.y - bird.height / 2, 40, 40, topAngle.x - 1, botAngle.y, 2, spike.height * 2)) {
+         rectIntersect(bird.x - bird.width / 2, bird.y - bird.height / 2, 40, 40, spikeVerticalHitbox, botAngle.y + 2, 2, spike.height * 2 - 10)) {
             endGame();
         }
     })
@@ -226,11 +233,11 @@ function endGame() {
 
     bird.alive = false;
     bird.color = 'grey';
-    document.removeEventListener('mousedown', birdJump);
-    document.removeEventListener('touchstart', birdJump);
+    canvas.removeEventListener('mousedown', birdJump);
+    canvas.removeEventListener('touchstart', birdJump);
     
-    document.addEventListener('mousedown', retryGame);
-    document.addEventListener('touchstart', retryGame);
+    canvas.addEventListener('mousedown', retryGame);
+    canvas.addEventListener('touchstart', retryGame);
 }
 
 function retryGame() {
@@ -256,10 +263,10 @@ function retryGame() {
     mainColor = '#ffd4dd';
 
     spikeColumn = [];
-    document.removeEventListener('mousedown', retryGame);
-    document.removeEventListener('touchstart', retryGame);
+    canvas.removeEventListener('mousedown', retryGame);
+    canvas.removeEventListener('touchstart', retryGame);
 
-    device === 'pc' ? document.addEventListener('mousedown', birdJump) : document.addEventListener('touchstart', birdJump);
+    device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
 }
 
 function drawScore() {
@@ -402,4 +409,12 @@ function birdJump() {
     jumpSfx.play();
 }
 
-device === 'pc' ? document.addEventListener('mousedown', birdJump) : document.addEventListener('touchstart', birdJump);
+function showPatchNote() {
+    alert(`В недавнем обновлении:
+         - Игра тепеь доступна на 120гц и более;
+         - Исправлены положения и хитбоксы вертикальных шипов;
+         - Теперь экран не приближается на iOS в telegram-browser;
+         - Исправлены фризы на 60гц;`)
+}
+
+device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);

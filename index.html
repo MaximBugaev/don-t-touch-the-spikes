@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Document</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,10 @@
         </div>
 
         <div class="game">
-            <span class="game__best-score">Best Score: 0</span>
+            <div class="game-info">
+                <span class="game-info__best-score">Best Score: 0</span>
+                <a class="game-info__patch-note" onclick="showPatchNote()">patch note</a>
+            </div>
             <canvas id='canvas' width="500" height="750" class="game__canvas"></canvas> 
         </div>
     </main>

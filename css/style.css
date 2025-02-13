@@ -40,8 +40,19 @@ p {
     margin: 0 auto;
 }
 
-.game__best-score {
+.game-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.game-info__best-score,
+.game-info__patch-note {
     font-size: 2em;
+}
+
+.game-info__patch-note {
+    color: #f941ff;
+    text-decoration: underline;
 }
 
 .game__canvas {
