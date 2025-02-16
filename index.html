@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Document</title>
+    <title>Don`t touch the spikes</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -25,7 +25,10 @@
         <div class="game">
             <div class="game-info">
                 <span class="game-info__best-score">Best Score: 0</span>
-                <a class="game-info__patch-note" onclick="showPatchNote()">patch note</a>
+                <div class="game-info__patch">
+                    <a class="game-info__patch-note" onclick="showPatchNote()">patch note</a>
+                    <span class="game-info__patch-number">2</span>
+                </div>
             </div>
             <canvas id='canvas' width="500" height="750" class="game__canvas"></canvas> 
         </div>

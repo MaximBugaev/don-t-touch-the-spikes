@@ -50,15 +50,36 @@ p {
     font-size: 2em;
 }
 
+.game-info__patch {
+    position: relative;
+}
+
 .game-info__patch-note {
     color: #f941ff;
     text-decoration: underline;
+    cursor: pointer;
+}
+
+.game-info__patch-number {
+    position: absolute;
+    content: '';
+    right: -10px;
+    top: 0;
+
+    font-size: 0.8em;
+    width: 15px;
+    height: 15px;
+    background-color: #f941ff;
+    text-align: center;
+    color: #ffffff;
+    border-radius: 50%;
 }
 
 .game__canvas {
     display: block; 
     border: #000000 1px solid; 
     border-radius: 10px;
+    max-height: calc(100vh - 45px);
 }
 
 @media (max-width: 768px) {

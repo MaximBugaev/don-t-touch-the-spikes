@@ -27,6 +27,7 @@ let bestScoreCaption = document.querySelector('.game-info__best-score');
 let aimProgress = document.querySelector('.main-aim__progress')
 
 let mainColor = '#ffd4dd';
+let spikesColor = '#A64A55';
 let gameStarted = false;
 let fontSize = 40;
 
@@ -179,7 +180,7 @@ function drawSpikeColumn() {
             spikeVerticalHitbox = topAngle.x - 2
         }
 
-        ctx.fillStyle = 'grey';
+        ctx.fillStyle = spikesColor;
         ctx.beginPath();
         ctx.moveTo(spikeX, spike.y);
         ctx.lineTo(topAngle.x, topAngle.y);
@@ -212,7 +213,7 @@ function drawSpikeRow(side) {
         }
 
 
-        ctx.fillStyle = 'grey';
+        ctx.fillStyle = spikesColor;
         ctx.beginPath();
         ctx.moveTo(spike.x, spikeY);
         ctx.lineTo(spike.x - spike.width, spikeY - spikeH);
@@ -261,6 +262,7 @@ function retryGame() {
     score = 0;
 
     mainColor = '#ffd4dd';
+    spikesColor = '#A64A55';
 
     spikeColumn = [];
     canvas.removeEventListener('mousedown', retryGame);
@@ -286,38 +288,38 @@ function drawScore() {
 
 function setMainColor() {
     switch (score) {
-        case 5:
-            
+        case 5: //5
+            spikesColor = '#085A63';
             mainColor = '#76bcf5';
             break;
 
-        case 10:
-            
+        case 10: //10
+            spikesColor = '#E89C91';
             mainColor = '#FFDE6B';
             break;
 
-        case 15:
-            
+        case 15: //15
+            spikesColor = '#236F0F';
             mainColor = '#82b21e';
             break;
 
-        case 20: 
-            
+        case 20: //20
+            spikesColor = '#D30715';
             mainColor = '#fcaf67';
             break;
 
-        case 25: 
-            
+        case 25: //25
+            spikesColor = '#A34AAD';
             mainColor = '#ff9ac7';
             break;
 
-        case 30: 
-
-            mainColor = '#cc925d';
+        case 30: //30
+            spikesColor = '#AE9689';
+            mainColor = '#00204C';
             break;
 
-        case 35: 
-
+        case 35: //35
+            spikesColor = 'grey';
             mainColor = '#D2D2D4';
             break;
     }
@@ -410,11 +412,14 @@ function birdJump() {
 }
 
 function showPatchNote() {
-    alert(`В недавнем обновлении:
+    alert(`
+        13.02: 
          - Игра тепеь доступна на 120гц и более;
          - Исправлены положения и хитбоксы вертикальных шипов;
          - Теперь экран не приближается на iOS в telegram-browser;
-         - Исправлены фризы на 60гц;`)
+         - Исправлены фризы на 60гц;
+         16.02:
+         - Новая палитра цветов;`)
 }
 
 device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
