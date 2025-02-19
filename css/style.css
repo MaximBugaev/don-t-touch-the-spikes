@@ -1,7 +1,8 @@
 body {
     font-family: "Roboto", serif;
     font-weight: 500;
-    color: #000000;
+    color: #ffffff;
+    background-color: #212327;
 }
 
 h1,
@@ -15,34 +16,67 @@ p {
     padding: 0;
 }
 
-.main {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    margin: 50px auto 0;
-}
-
-.main-aim {
-    width: 80%;
-    margin: 0 auto;
-    font-size: 2em;
-}
-
-.main-aim__title {
+.main-header {
     font-size: 1.5em;
     margin-bottom: 30px;
 }
 
-.main-aim__description {
-    margin-bottom: 40px;
+.main-header__title {
+    text-align: center;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 auto;
+}
+
+.main > div {
+    margin: 0 auto;
+}
+
+.leaderboards {
+    min-width: 360px;
+    max-width: 500px;
+}
+
+.leaderboards-table {
+    width: 100%;
+}
+
+.leaderboards-table td,
+.leaderboards-table th,
+.leaderboards-table {
+    border-collapse: collapse;
+    border: 1px solid #3e7bff;
+    text-align: center;
+}
+
+.leaderboards-table td,
+.leaderboards-table th {
+    padding: 5px;
+}
+
+.active-player {
+    color: #d45950;
 }
 
 .game {
-    margin: 0 auto;
+    /* margin: 0 auto; */
 }
 
 .game-info {
     display: flex;
     justify-content: space-between;
+    margin: 0 auto;
+
+    font-size: 0.8em;
+}
+
+.game-info,
+.comming-soon__title,
+.leaderboards__title {
+    margin-bottom: 5px;
 }
 
 .game-info__best-score,
@@ -55,7 +89,7 @@ p {
 }
 
 .game-info__patch-note {
-    color: #f941ff;
+    color: #c01509;
     font-weight: 700;
     cursor: pointer;
 }
@@ -63,13 +97,13 @@ p {
 .game-info__patch-number {
     position: absolute;
     content: '';
-    right: -10px;
-    top: 0;
+    right: -17px;
+    top: -8px;
 
     font-size: 0.8em;
-    width: 15px;
+    width: 35px;
     height: 15px;
-    background-color: #f941ff;
+    background-color: #c01509;
     text-align: center;
     color: #ffffff;
     border-radius: 50%;
@@ -77,26 +111,30 @@ p {
 
 .game__canvas {
     display: block; 
-    border: #000000 1px solid; 
+    border: #ffffff 1px solid; 
     border-radius: 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
+    .main-header {
+        font-size: 1em;
+        margin-bottom: 20px;
+    }
+
     .main {
         display: flex;
         flex-direction: column;
-        margin: 15px 0 0 0;
+        gap: 50px;
     }
 
     .game {
         width: 100%;
         margin: 0;
         order: -1;
-        margin-bottom: 40px;
     }
 
     .game-info {
-        margin-bottom: 5px;
+        max-width: 402px;
     }
 
     .game__canvas {
@@ -105,9 +143,4 @@ p {
         max-width: 400px;
         max-height: 664px;
     }
-
-    .main-aim {
-        width: 100%;
-    }
-
 }

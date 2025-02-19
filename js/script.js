@@ -1,14 +1,13 @@
 'use strict'
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-import { get, getDatabase, ref, set } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
+import { get, getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
 import { firebaseConfig } from '../config.js'
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 let user = localStorage.getItem('username');
-console.log(localStorage.getItem('username'))
 
 let bestScore = 0;
 let bestScoreCaption = document.querySelector('.game-info__best-score');
@@ -59,6 +58,42 @@ function saveBestScore(collectionName, bestScore) {
     })
 }
 
+const userRef = ref(db, 'users/');
+let usersCollection = [];
+let leaderboards = document.querySelector('.leaderboards-table__body');
+
+let isCurrentUser;
+
+onValue(userRef, (snapshot) => {
+    usersCollection = [];
+    const sortedData = Object.entries(snapshot.val()).sort((a, b) => b[1]['bestScore'] - a[1]['bestScore']);
+
+    sortedData.forEach(item => {
+        usersCollection.push({
+            bestScore: item[1]['bestScore'],
+            username: item[1]['username'],
+            login: item[0],
+        });
+    })
+
+    usersCollection.length = 15;
+
+    leaderboards.innerHTML = '';
+
+    usersCollection.forEach((item, index) => {
+        isCurrentUser = item.login === user;
+
+        leaderboards.insertAdjacentHTML('beforeend', `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${item.username + (isCurrentUser ? ' <span class="active-player">(you)</span>' : '')}</td>
+                <td>${item.bestScore}</td>
+            </tr>
+            `);
+
+    })
+});
+
 let recievedData = {}
 
 async function main() {
@@ -67,7 +102,7 @@ async function main() {
     if (data && data.username) {
         console.log("Полученные данные:", data);
         bestScore = data.bestScore;
-        bestScoreCaption.textContent = `Best Score: ${bestScore}`;
+        bestScoreCaption.textContent = `Best score: ${bestScore}`;
         recievedData = data;
     }
     } catch (error) {
@@ -100,14 +135,12 @@ ctx = canvas.getContext('2d');
 
 window.requestAnimationFrame(gameLoop);
 
-// let jumpSfx = document.querySelector('#jump');
 let crashSfx = document.querySelector('#crash');
 let wallCollSfx = document.querySelector('#wallColl');
 
 let device = 'pc';
 screen.availWidth < 768 ? device = 'mobile' : device = 'pc';
 
-// jumpSfx.volume = 0.3;
 crashSfx.volume = 0.5;
 wallCollSfx.volume = 0.3;
 
@@ -507,19 +540,22 @@ function birdJump() {
 
 function showPatchNote() {
     alert(`
-        13.02: 
-         - Игра тепеь доступна на 120гц и более;
-         - Исправлены положения и хитбоксы вертикальных шипов;
-         - Теперь экран не приближается на iOS в telegram-browser;
-         - Исправлены фризы на 60гц;
-         16.02:
-         - Новая палитра цветов;
-         19.02:
-         - Добавлена база данных и сохранение рекордов;
-         ??.02:
-         - Таблица лидеров (скоро)`)
+        20.02:
+        - добавлена таблица лидеров;
+        - добавлена темная тема;
+        ??.02 (скоро):
+        - смена ника;
+        ??.03 (скоро): 
+        - новый режим
+        `)
 }
 
 document.querySelector('.game-info__patch-note').addEventListener('click', showPatchNote);
 
 device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
+
+// setInterval(function() {
+//     (function() {
+//         debugger;
+//     })();
+// }, 500);

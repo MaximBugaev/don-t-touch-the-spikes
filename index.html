@@ -10,32 +10,46 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <audio id='jump' src="sfx/@starboyrob - medhvt perc.wav"></audio>
-    <audio id='crash' src="sfx/@starboyrob - rob needle 2.wav"></audio>
-    <audio id='wallColl' src="sfx/@starboyrob - dara needle 2.wav"></audio>
+    <header class="main-header">
+        <h1 class="main-header__title">DON`T TOUCH THE SPIKES</h1>
+    </header>
 
     <main class="main">
-        <!-- <div class="main-aim">
-            <h2 class="main-aim__title">Reach 40 points to get 100 FPIBanks</h2>
-            <p class="main-aim__description">Send a video of reaching 40 points to the creator of game to get royalties</p>
-            <progress class="main-aim__progress" max="40" value='0'></progress>
-        </div> -->
 
         <div class="leaderboards">
-            
+            <h2 class="leaderboards__title">Leaderboards (top 15)</h1>
+            <table class="leaderboards-table">
+                <thead class="leaderboards-table__head">
+                    <tr>
+                        <th>place</th>
+                        <th>nickname</th>
+                        <th>best score</th>
+                    </tr>
+                </thead>
+                <tbody class="leaderboards-table__body">
+
+                </tbody>
+            </table>
         </div>
 
         <div class="game">
             <div class="game-info">
-                <span class="game-info__best-score">Best Score: 0</span>
+                <span class="game-info__best-score">Best score: 0</span>
                 <div class="game-info__patch">
-                    <a class="game-info__patch-note" onclick="showPatchNote()">patch note</a>
-                    <span class="game-info__patch-number">4</span>
+                    <a class="game-info__patch-note" onclick="showPatchNote()">global update</a>
+                    <span class="game-info__patch-number">new</span>
                 </div>
             </div>
             <canvas id='canvas' width="500" height="750" class="game__canvas"></canvas> 
         </div>
+
+        <div class="comming-soon">
+            <h2 class="comming-soon__title">COMMING SOON</h2>
+            <p class="comming-soon__description">new game mode will be added after авангард</p>
+        </div>
     </main>
+    <audio id='crash' src="sfx/@starboyrob - rob needle 2.wav"></audio>
+    <audio id='wallColl' src="sfx/@starboyrob - dara needle 2.wav"></audio>
     <script type='module' src="js/script.js"></script>
 </body>
 </html>
