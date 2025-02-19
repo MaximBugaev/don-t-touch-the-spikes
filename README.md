@@ -6,5 +6,6 @@ It is my first canvas browser game\
 > * HTML
 > * CSS
 > * JS (using canvas)
+> * Firebase
 
 <u>Have a good game!</u>
