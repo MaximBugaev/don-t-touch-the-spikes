@@ -56,7 +56,7 @@ p {
 
 .game-info__patch-note {
     color: #f941ff;
-    text-decoration: underline;
+    font-weight: 700;
     cursor: pointer;
 }
 
@@ -79,14 +79,13 @@ p {
     display: block; 
     border: #000000 1px solid; 
     border-radius: 10px;
-    max-height: calc(100vh - 45px);
 }
 
 @media (max-width: 768px) {
     .main {
         display: flex;
         flex-direction: column;
-        margin: 0;
+        margin: 15px 0 0 0;
     }
 
     .game {
@@ -96,8 +95,15 @@ p {
         margin-bottom: 40px;
     }
 
+    .game-info {
+        margin-bottom: 5px;
+    }
+
     .game__canvas {
         width: 100%;
+        margin: 0 auto;
+        max-width: 400px;
+        max-height: 664px;
     }
 
     .main-aim {

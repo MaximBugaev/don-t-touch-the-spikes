@@ -1,5 +1,97 @@
 'use strict'
 
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+import { get, getDatabase, ref, set } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
+import { firebaseConfig } from '../config.js'
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let user = localStorage.getItem('username');
+console.log(localStorage.getItem('username'))
+
+let bestScore = 0;
+let bestScoreCaption = document.querySelector('.game-info__best-score');
+
+while(true) {
+    if(localStorage.getItem('username')) {
+        main();
+        break;
+    }
+
+    user = prompt('Для начала игры введите имя (минимум 3 символа):', '');
+
+    if(user && user.length > 2 && user.length < 18) {
+
+        get(ref(db, "users/" + user)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    main();
+                    localStorage.setItem('username', user);
+                } else {
+                    addUser(user, user);
+                    localStorage.setItem('username', user);
+                }
+        })
+        .catch((error) => {
+            console.error("Ошибка при получении данных:", error)
+        })
+
+        alert('Ваш прогресс автоматически сохраняется. Приятной игры!');
+
+        break;
+    } else {
+        alert('Неверно! Попробуйте ещё раз')
+    }
+}
+
+
+function addUser(collectionName, username) {
+    set(ref(db, 'users/' + collectionName), {
+        username: username,
+        bestScore: 0,
+    })
+}
+
+function saveBestScore(collectionName, bestScore) {
+    set(ref(db, 'users/' + collectionName), {
+        username: collectionName,
+        bestScore: bestScore,
+    })
+}
+
+let recievedData = {}
+
+async function main() {
+    try {
+        const data = await getData(user);
+    if (data && data.username) {
+        console.log("Полученные данные:", data);
+        bestScore = data.bestScore;
+        bestScoreCaption.textContent = `Best Score: ${bestScore}`;
+        recievedData = data;
+    }
+    } catch (error) {
+        console.error("Произошла ошибка:", error);
+    }
+}
+
+function getData(user) {
+    return new Promise((resolve, reject) => {
+        const dataRef = ref(db, `users/${user}`);
+        get(dataRef)
+            .then((snapshot) => {
+                if (snapshot.exists()) {
+                    resolve(snapshot.val());
+                }
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+}
+
+//////////////////
+
 let canvas;
 let ctx;
 
@@ -8,23 +100,21 @@ ctx = canvas.getContext('2d');
 
 window.requestAnimationFrame(gameLoop);
 
-let jumpSfx = document.querySelector('#jump');
+// let jumpSfx = document.querySelector('#jump');
 let crashSfx = document.querySelector('#crash');
 let wallCollSfx = document.querySelector('#wallColl');
 
 let device = 'pc';
 screen.availWidth < 768 ? device = 'mobile' : device = 'pc';
 
-jumpSfx.volume = 0.3;
+// jumpSfx.volume = 0.3;
 crashSfx.volume = 0.5;
 wallCollSfx.volume = 0.3;
 
 let gravity = 0.5;
 let score = 0;
-let bestScore = 0;
 
-let bestScoreCaption = document.querySelector('.game-info__best-score');
-let aimProgress = document.querySelector('.main-aim__progress')
+// let aimProgress = document.querySelector('.main-aim__progress')
 
 let mainColor = '#ffd4dd';
 let spikesColor = '#A64A55';
@@ -91,9 +181,7 @@ function spawnSpikeRow() {
 
 spawnSpikeRow();
 
-let stop = false;
-let frameCount = 0;
-let fps, fpsInterval, startTime, now, then, elapsed;
+let fpsInterval, startTime, now, then, elapsed;
 
 
 function startAnimating(fps) {
@@ -255,9 +343,15 @@ function retryGame() {
         alive: true,
     }
     
-    score > bestScore ? bestScore = score : score;
-    bestScoreCaption.textContent = `Best Score: ${bestScore}`;
-    aimProgress.value = bestScore;
+    if(score > bestScore) {
+        bestScore = score;
+        bestScoreCaption.textContent = `Best Score: ${bestScore}`;
+        localStorage.setItem('bestScore', bestScore);
+
+        saveBestScore(user, bestScore)
+
+    }
+    // aimProgress.value = bestScore;
 
     score = 0;
 
@@ -408,7 +502,7 @@ function birdJump() {
     gameStarted = true;
     bird.vy = -10;
     bird.vx = bird.vector === 'right' ? 6 : -6;
-    jumpSfx.play();
+    // jumpSfx.play();
 }
 
 function showPatchNote() {
@@ -419,7 +513,13 @@ function showPatchNote() {
          - Теперь экран не приближается на iOS в telegram-browser;
          - Исправлены фризы на 60гц;
          16.02:
-         - Новая палитра цветов;`)
+         - Новая палитра цветов;
+         19.02:
+         - Добавлена база данных и сохранение рекордов;
+         ??.02:
+         - Таблица лидеров (скоро)`)
 }
+
+document.querySelector('.game-info__patch-note').addEventListener('click', showPatchNote);
 
 device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);

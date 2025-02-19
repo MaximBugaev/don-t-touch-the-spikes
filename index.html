@@ -15,10 +15,14 @@
     <audio id='wallColl' src="sfx/@starboyrob - dara needle 2.wav"></audio>
 
     <main class="main">
-        <div class="main-aim">
+        <!-- <div class="main-aim">
             <h2 class="main-aim__title">Reach 40 points to get 100 FPIBanks</h2>
             <p class="main-aim__description">Send a video of reaching 40 points to the creator of game to get royalties</p>
             <progress class="main-aim__progress" max="40" value='0'></progress>
+        </div> -->
+
+        <div class="leaderboards">
+            
         </div>
 
         <div class="game">
@@ -26,14 +30,12 @@
                 <span class="game-info__best-score">Best Score: 0</span>
                 <div class="game-info__patch">
                     <a class="game-info__patch-note" onclick="showPatchNote()">patch note</a>
-                    <span class="game-info__patch-number">2</span>
+                    <span class="game-info__patch-number">4</span>
                 </div>
             </div>
             <canvas id='canvas' width="500" height="750" class="game__canvas"></canvas> 
         </div>
     </main>
-
-    <script src="js/script.js"></script>
-    
+    <script type='module' src="js/script.js"></script>
 </body>
 </html>
