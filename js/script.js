@@ -72,6 +72,7 @@ function saveBestScore(collectionName, bestScore) {
 const userRef = ref(db, 'users/');
 let usersCollection = [];
 let leaderboard = document.querySelector('.leaderboard-table__body');
+let playersNum = document.querySelector('.leaderboard__players-num');
 
 let isCurrentUser;
 let isAdmin;
@@ -87,7 +88,8 @@ onValue(userRef, (snapshot) => {
             login: item[0],
         });
     })
-    3
+    
+    playersNum.textContent = 'Всего игроков: ' + usersCollection.length;
     console.log(usersCollection)
 
     usersCollection.length = 15;
@@ -127,7 +129,7 @@ async function main() {
 function getData(user) {
     return new Promise((resolve, reject) => {
         
-        alert('Подключение к серверу')
+        alert('Подключение к серверу...')
 
         const dataRef = ref(db, `users/${user}`);
         get(dataRef)
@@ -385,7 +387,6 @@ function retryGame() {
     if(score > bestScore) {
         bestScore = score;
         bestScoreCaption.textContent = `Best score: ${bestScore}`;
-        localStorage.setItem('bestScore', bestScore);
 
         saveBestScore(user, bestScore)
 
@@ -557,9 +558,3 @@ function showPatchNote() {
 }
 
 document.querySelector('.game-info__patch-note').addEventListener('click', showPatchNote);
-
-setInterval(function() {
-    (function() {
-        debugger;
-    })();
-}, 500);

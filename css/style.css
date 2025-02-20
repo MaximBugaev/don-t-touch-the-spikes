@@ -73,6 +73,11 @@ p {
     color: #a36b6b;
 }
 
+.leaderboard__players-num {
+    margin-top: 5px;
+    color: #3e7bff;
+}
+
 .game-info {
     display: flex;
     justify-content: space-between;
