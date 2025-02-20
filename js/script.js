@@ -60,9 +60,10 @@ function saveBestScore(collectionName, bestScore) {
 
 const userRef = ref(db, 'users/');
 let usersCollection = [];
-let leaderboards = document.querySelector('.leaderboards-table__body');
+let leaderboard = document.querySelector('.leaderboard-table__body');
 
 let isCurrentUser;
+let isAdmin;
 
 onValue(userRef, (snapshot) => {
     usersCollection = [];
@@ -75,16 +76,19 @@ onValue(userRef, (snapshot) => {
             login: item[0],
         });
     })
+    3
+    console.log(usersCollection)
 
     usersCollection.length = 15;
 
-    leaderboards.innerHTML = '';
+    leaderboard.innerHTML = '';
 
     usersCollection.forEach((item, index) => {
         isCurrentUser = item.login === user;
+        isAdmin = item.login === 'max';
 
-        leaderboards.insertAdjacentHTML('beforeend', `
-            <tr>
+        leaderboard.insertAdjacentHTML('beforeend', `
+            <tr class='${index === 0 ? 'first-place' : ''} ${index === 1 ? 'second-place' : ''} ${index === 2 ? 'third-place' : ''}'>
                 <td>${index + 1}</td>
                 <td>${item.username + (isCurrentUser ? ' <span class="active-player">(you)</span>' : '')}</td>
                 <td>${item.bestScore}</td>
@@ -106,7 +110,7 @@ async function main() {
         recievedData = data;
     }
     } catch (error) {
-        console.error("Произошла ошибка:", error);
+        alert("Внимание! Проверьте подключение к интернету! Ваш прогресс не сохраняется")
     }
 }
 
@@ -378,7 +382,7 @@ function retryGame() {
     
     if(score > bestScore) {
         bestScore = score;
-        bestScoreCaption.textContent = `Best Score: ${bestScore}`;
+        bestScoreCaption.textContent = `Best score: ${bestScore}`;
         localStorage.setItem('bestScore', bestScore);
 
         saveBestScore(user, bestScore)
