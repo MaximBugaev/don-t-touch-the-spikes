@@ -122,6 +122,7 @@ p {
     border: #ffffff 1px solid; 
     border-radius: 10px;
     cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 @media (max-width: 1200px) {

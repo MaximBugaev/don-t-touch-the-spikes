@@ -558,8 +558,8 @@ document.querySelector('.game-info__patch-note').addEventListener('click', showP
 
 device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
 
-// setInterval(function() {
-//     (function() {
-//         debugger;
-//     })();
-// }, 500);
+setInterval(function() {
+    (function() {
+        debugger;
+    })();
+}, 500);
