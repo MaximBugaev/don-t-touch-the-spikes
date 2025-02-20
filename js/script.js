@@ -29,7 +29,7 @@ while(true) {
 
     user = prompt('Для начала игры введите имя (минимум 3 символа):', '');
 
-    if(user && user.length > 2 && user.length < 18) {
+    if(user.trim() && user.trim().length > 2 && user.trim().length < 18) {
 
         get(ref(db, "users/" + user)).then((snapshot) => {
                 if (snapshot.exists()) {
