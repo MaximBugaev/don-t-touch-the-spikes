@@ -12,6 +12,15 @@ let user = localStorage.getItem('username');
 let bestScore = 0;
 let bestScoreCaption = document.querySelector('.game-info__best-score');
 
+let canvas;
+let ctx;
+
+canvas = document.getElementById('canvas');
+ctx = canvas.getContext('2d');
+
+let device = 'pc';
+screen.availWidth < 768 ? device = 'mobile' : device = 'pc';
+
 while(true) {
     if(localStorage.getItem('username')) {
         main();
@@ -26,9 +35,11 @@ while(true) {
                 if (snapshot.exists()) {
                     main();
                     localStorage.setItem('username', user);
+                    device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
                 } else {
                     addUser(user, user);
                     localStorage.setItem('username', user);
+                    device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
                 }
         })
         .catch((error) => {
@@ -98,16 +109,15 @@ onValue(userRef, (snapshot) => {
     })
 });
 
-let recievedData = {}
-
 async function main() {
     try {
         const data = await getData(user);
+        alert('Добро пожаловать, ' + data.username + '! ' + 'Приятной игры!')
     if (data && data.username) {
         console.log("Полученные данные:", data);
         bestScore = data.bestScore;
         bestScoreCaption.textContent = `Best score: ${bestScore}`;
-        recievedData = data;
+        device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
     }
     } catch (error) {
         alert("Внимание! Проверьте подключение к интернету! Ваш прогресс не сохраняется")
@@ -116,12 +126,13 @@ async function main() {
 
 function getData(user) {
     return new Promise((resolve, reject) => {
+        
+        alert('Подключение к серверу')
+
         const dataRef = ref(db, `users/${user}`);
         get(dataRef)
             .then((snapshot) => {
-                if (snapshot.exists()) {
-                    resolve(snapshot.val());
-                }
+                resolve(snapshot.val());
             })
             .catch((error) => {
                 reject(error);
@@ -131,19 +142,10 @@ function getData(user) {
 
 //////////////////
 
-let canvas;
-let ctx;
-
-canvas = document.getElementById('canvas');
-ctx = canvas.getContext('2d');
-
 window.requestAnimationFrame(gameLoop);
 
 let crashSfx = document.querySelector('#crash');
 let wallCollSfx = document.querySelector('#wallColl');
-
-let device = 'pc';
-screen.availWidth < 768 ? device = 'mobile' : device = 'pc';
 
 crashSfx.volume = 0.5;
 wallCollSfx.volume = 0.3;
@@ -555,8 +557,6 @@ function showPatchNote() {
 }
 
 document.querySelector('.game-info__patch-note').addEventListener('click', showPatchNote);
-
-device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
 
 setInterval(function() {
     (function() {
