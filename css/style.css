@@ -37,8 +37,9 @@ p {
 }
 
 .leaderboard {
-    min-width: 360px;
+    min-width: 300px;
     max-width: 500px;
+    width: 100%;
 }
 
 .leaderboard-table {
