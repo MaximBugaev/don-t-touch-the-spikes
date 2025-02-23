@@ -85,7 +85,7 @@ while(true) {
         
         get(ref(db, "users/" + user)).then((snapshot) => {
                 if (snapshot.exists()) {
-                    let loginConfirm = confirm('Такой аккаунт уже существуют, создайте новый, нажав ОТМЕНА и введя новый ник, либо ОК, чтобы войти в аккаунт')
+                    let loginConfirm = confirm('Такой аккаунт уже существует, создайте новый, нажав ОТМЕНА и введя новый ник, либо ОК, чтобы войти в аккаунт')
 
                     if(!loginConfirm) {
                         location.reload();
