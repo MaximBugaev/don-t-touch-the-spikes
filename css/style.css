@@ -29,6 +29,7 @@ p {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     padding: 0 auto;
+    margin-bottom: 30px;
 }
 
 .main > div {
@@ -128,6 +129,29 @@ p {
     border-radius: 10px;
     cursor: pointer;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.leave-account {
+    display: block;
+    margin: 0 auto;
+
+    background-color: #212327;
+    color: #c01509;
+    font-size: inherit;
+    padding: 20px;
+    border: 1px solid #c01509;
+    outline: none;
+}
+
+.leave-account:hover {
+    border: 1px solid #ffffff;
+    color: #ffffff;
+}
+
+.leave-account:active {
+    border: 1px solid #ffffff;
+    background-color: #ffffff;
+    color: #000000;
 }
 
 @media (max-width: 1200px) {

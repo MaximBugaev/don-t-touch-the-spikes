@@ -1,11 +1,19 @@
-'use strict'
-
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
 import { get, getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
 import { firebaseConfig } from '../config.js'
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
+let leaveBtn = document.querySelector('.leave-account');
+
+if(!localStorage.getItem('attemptsToChangeName')) {
+    localStorage.setItem('attemptsToChangeName', 2);
+}
+
+leaveBtn.textContent = `Выйти из аккаунта (${(+localStorage.getItem('attemptsToChangeName') === 0 || +localStorage.getItem('attemptsToChangeName') === 2) ? 'осталось' : 'осталась'} ${localStorage.getItem('attemptsToChangeName')} ${+localStorage.getItem('attemptsToChangeName') === 2 ? 'попытки' : 
+    +localStorage.getItem('attemptsToChangeName') === 1 ? 'попытка' : 'попыток'
+})` 
 
 let user = localStorage.getItem('username');
 
@@ -15,11 +23,55 @@ let bestScoreCaption = document.querySelector('.game-info__best-score');
 let canvas;
 let ctx;
 
+const userRef = ref(db, 'users/');
+
 canvas = document.getElementById('canvas');
 ctx = canvas.getContext('2d');
 
 let device = 'pc';
 screen.availWidth < 768 ? device = 'mobile' : device = 'pc';
+
+let usersCollection = [];
+
+let leaderboard = document.querySelector('.leaderboard-table__body');
+let playersNum = document.querySelector('.leaderboard__players-num');
+
+let isCurrentUser;
+let isAdmin;
+
+onValue(userRef, (snapshot) => {
+
+        usersCollection = [];
+        const sortedData = Object.entries(snapshot.val()).sort((a, b) => b[1]['bestScore'] - a[1]['bestScore']);
+
+        sortedData.forEach(item => {
+            usersCollection.push({
+                bestScore: item[1]['bestScore'],
+                username: item[1]['username'],
+                login: item[0],
+            });
+        })
+        
+        playersNum.textContent = 'Всего игроков: ' + usersCollection.length;
+
+        usersCollection.length = 15;
+        // console.log(usersCollection)
+
+        leaderboard.innerHTML = '';
+
+        usersCollection.forEach((item, index) => {
+            isCurrentUser = item.login === user;
+            isAdmin = item.login === 'max';
+
+            leaderboard.insertAdjacentHTML('beforeend', `
+                <tr class='${index === 0 ? 'first-place' : ''} ${index === 1 ? 'second-place' : ''} ${index === 2 ? 'third-place' : ''}'>
+                    <td>${index + 1}</td>
+                    <td>${item.username + (isCurrentUser ? ' <span class="active-player">(you)</span>' : '')}</td>
+                    <td>${item.bestScore}</td>
+                </tr>
+                `);
+        })
+    })
 
 while(true) {
     if(localStorage.getItem('username')) {
@@ -29,24 +81,31 @@ while(true) {
 
     user = prompt('Для начала игры введите имя (минимум 3 символа):', '');
 
-    if(user.trim() && user.trim().length > 2 && user.trim().length < 18) {
-
+    if(user.trim() && user.trim().length > 2 && user.trim().length < 18) { 
+        
         get(ref(db, "users/" + user)).then((snapshot) => {
                 if (snapshot.exists()) {
-                    main();
-                    localStorage.setItem('username', user);
-                    device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
+                    let loginConfirm = confirm('Такой аккаунт уже существуют, создайте новый, нажав ОТМЕНА и введя новый ник, либо ОК, чтобы войти в аккаунт')
+
+                    if(!loginConfirm) {
+                        location.reload();
+                    } else {     
+                        main();
+                        localStorage.setItem('username', user);
+                        device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
+                    }
+
                 } else {
                     addUser(user, user);
                     localStorage.setItem('username', user);
                     device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
+
+                    alert('Ваш прогресс автоматически сохраняется. Приятной игры!');
                 }
         })
         .catch((error) => {
             console.error("Ошибка при получении данных:", error)
         })
-
-        alert('Ваш прогресс автоматически сохраняется. Приятной игры!');
 
         break;
     } else {
@@ -69,60 +128,17 @@ function saveBestScore(collectionName, bestScore) {
     })
 }
 
-const userRef = ref(db, 'users/');
-let usersCollection = [];
-let leaderboard = document.querySelector('.leaderboard-table__body');
-let playersNum = document.querySelector('.leaderboard__players-num');
-
-let isCurrentUser;
-let isAdmin;
-
-onValue(userRef, (snapshot) => {
-    usersCollection = [];
-    const sortedData = Object.entries(snapshot.val()).sort((a, b) => b[1]['bestScore'] - a[1]['bestScore']);
-
-    sortedData.forEach(item => {
-        usersCollection.push({
-            bestScore: item[1]['bestScore'],
-            username: item[1]['username'],
-            login: item[0],
-        });
-    })
-    
-    playersNum.textContent = 'Всего игроков: ' + usersCollection.length;
-    console.log(usersCollection)
-
-    usersCollection.length = 15;
-
-    leaderboard.innerHTML = '';
-
-    usersCollection.forEach((item, index) => {
-        isCurrentUser = item.login === user;
-        isAdmin = item.login === 'max';
-
-        leaderboard.insertAdjacentHTML('beforeend', `
-            <tr class='${index === 0 ? 'first-place' : ''} ${index === 1 ? 'second-place' : ''} ${index === 2 ? 'third-place' : ''}'>
-                <td>${index + 1}</td>
-                <td>${item.username + (isCurrentUser ? ' <span class="active-player">(you)</span>' : '')}</td>
-                <td>${item.bestScore}</td>
-            </tr>
-            `);
-
-    })
-});
-
 async function main() {
     try {
         const data = await getData(user);
         alert('Добро пожаловать, ' + data.username + '! ' + 'Приятной игры!')
     if (data && data.username) {
-        console.log("Полученные данные:", data);
         bestScore = data.bestScore;
         bestScoreCaption.textContent = `Best score: ${bestScore}`;
         device === 'pc' ? canvas.addEventListener('mousedown', birdJump) : canvas.addEventListener('touchstart', birdJump);
     }
     } catch (error) {
-        alert("Внимание! Проверьте подключение к интернету! Ваш прогресс не сохраняется")
+        alert("Внимание! Проверьте подключение к интернету или перезайдите в аккаунт! Ваш прогресс не сохраняется")
     }
 }
 
@@ -141,6 +157,20 @@ function getData(user) {
             });
     });
 }
+
+function leaveAccount() {
+    if(+localStorage.getItem('attemptsToChangeName') <= 0) {
+        alert('Попытки закончились')
+        return;
+    }
+
+    localStorage.removeItem('username');
+    localStorage.setItem("attemptsToChangeName", +localStorage.getItem('attemptsToChangeName') - 1);
+
+    window.location.reload();
+}
+
+leaveBtn.addEventListener('click', leaveAccount);
 
 //////////////////
 
@@ -550,8 +580,8 @@ function showPatchNote() {
         20.02:
         - добавлена таблица лидеров;
         - добавлена темная тема;
-        ??.02 (скоро):
-        - смена ника;
+        24.02:
+        - кнопка смены акканта;
         ??.03 (скоро): 
         - новый режим
         `)
