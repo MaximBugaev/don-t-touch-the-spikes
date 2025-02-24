@@ -179,8 +179,8 @@ window.requestAnimationFrame(gameLoop);
 let crashSfx = document.querySelector('#crash');
 let wallCollSfx = document.querySelector('#wallColl');
 
-crashSfx.volume = 0.5;
-wallCollSfx.volume = 0.3;
+crashSfx.volume = 0;
+wallCollSfx.volume = 0;
 
 let gravity = 0.5;
 let score = 0;
